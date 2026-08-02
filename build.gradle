@@ -2,6 +2,12 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.5.0'
+	id 'maven-publish'
+}
+
+repositories {
+	mavenCentral()
 }
 
 group = 'com.awa.centrale'
@@ -20,8 +26,22 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/wozufia/gestion-compte")
+			credentials {
+				username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+				password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+			}
+		}
+	}
 }
 
 dependencies {
@@ -30,8 +50,75 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+
+}
+
+def contractSpecFile = layout.buildDirectory.file("tmp/openapi/gestion-compte-contrat.yml")
+
+tasks.register('fetchContractSpec') {
+	outputs.file(contractSpecFile)
+	doLast {
+		def output = contractSpecFile.get().asFile
+		output.parentFile.mkdirs()
+			uri("https://raw.githubusercontent.com/wozufia/gestion-compte-contrat/master/gestion-compte-contrat.yml").toURL()
+				.withInputStream { input ->
+					output.withOutputStream { stream -> stream << input }
+				}
+	}
+}
+
+openApiGenerate {
+	inputSpec = contractSpecFile.get().asFile.absolutePath
+	outputDir = layout.buildDirectory.dir("generated").get().asFile.absolutePath
+	apiPackage = "com.awa.centrale.gestioncompte.api"
+	modelPackage = "com.awa.centrale.gestioncompte.model"
+//	invokerPackage = "com.awa.centrale.gestioncompte.invoker"
+	skipOverwrite = false
+	generateModelTests = false
+	generateApiTests = false
+	generatorName = "spring"
+	openapiNormalizer = ['REF_AS_PARENT_IN_ALLOF': 'true']
+	configOptions = [
+	        'useSpringBoot3': 'true',
+			'useTags': 'true'
+	]
+	importMappings = [
+	        'java.time.OffsetDateTime': 'java.time.ZonedDateTime',
+	]
+	typeMappings = [
+	        'OffsetDateTime': 'ZonedDateTime',
+	]
+	additionalProperties.set([
+			interfaceOnly: true,
+//			useJakartaEe: "true"
+			useBeanValidation: true,
+			skipDefaultInterface: true,
+			generatedConstructorWithRequiredArgs: false,
+			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @lombok.NoArgsConstructor; @lombok.experimental.SuperBuilder; @lombok.AllArgsConstructor;'
+
+	])
+}
+
+tasks.named('openApiGenerate') {
+	dependsOn tasks.named('fetchContractSpec')
+}
+
+tasks.named('compileJava') {
+	dependsOn tasks.named('openApiGenerate')
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir "$buildDir/generated/src/main/java"
+		}
+	}
 }
