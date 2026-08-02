@@ -53,16 +53,31 @@ dependencies {
 	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
 
 }
 
+def contractSpecFile = layout.buildDirectory.file("tmp/openapi/gestion-compte-contrat.yml")
+
+tasks.register('fetchContractSpec') {
+	outputs.file(contractSpecFile)
+	doLast {
+		def output = contractSpecFile.get().asFile
+		output.parentFile.mkdirs()
+			uri("https://raw.githubusercontent.com/wozufia/gestion-compte-contrat/master/gestion-compte-contrat.yml").toURL()
+				.withInputStream { input ->
+					output.withOutputStream { stream -> stream << input }
+				}
+	}
+}
+
 openApiGenerate {
-	inputSpec = "$rootDir/../gestion-compte-contrat/gestion-compte-contrat.yaml"
+	inputSpec = contractSpecFile.get().asFile.absolutePath
 	outputDir = layout.buildDirectory.dir("generated").get().asFile.absolutePath
 	apiPackage = "com.awa.centrale.gestioncompte.api"
 	modelPackage = "com.awa.centrale.gestioncompte.model"
 //	invokerPackage = "com.awa.centrale.gestioncompte.invoker"
-	skipOverwrite = true
+	skipOverwrite = false
 	generateModelTests = false
 	generateApiTests = false
 	generatorName = "spring"
@@ -83,9 +98,17 @@ openApiGenerate {
 			useBeanValidation: true,
 			skipDefaultInterface: true,
 			generatedConstructorWithRequiredArgs: false,
-			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @comfaterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @Lombok.NoArgsConstructor; @Lombok.experimental.SuperBuilder; @lombok.AllArgsConstructor;'
+			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @lombok.NoArgsConstructor; @lombok.experimental.SuperBuilder; @lombok.AllArgsConstructor;'
 
 	])
+}
+
+tasks.named('openApiGenerate') {
+	dependsOn tasks.named('fetchContractSpec')
+}
+
+tasks.named('compileJava') {
+	dependsOn tasks.named('openApiGenerate')
 }
 
 tasks.named('test') {
