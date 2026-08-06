@@ -3,10 +3,9 @@ package com.awa.centrale.gestioncompte.controller;
 import com.awa.centrale.gestioncompte.model.CreationUtilisateurRequete;
 import com.awa.centrale.gestioncompte.model.ModifierUtilisateurRequete;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 public class GestionUtilisateurController {
     @PostMapping("/auth/register")
     public Utilisateur creerUtilisateur(@RequestBody CreationUtilisateurRequete utilisateur) {
@@ -30,6 +29,12 @@ public class GestionUtilisateurController {
     public Utilisateur modifierUtilisateur(@PathVariable int id, @RequestBody ModifierUtilisateurRequete ModifierUtilisateurRequete) {
         // Logique pour modifier un utilisateur
         return null;
+    }
+
+    @PostMapping("/auth/login")
+    public String login(@RequestBody Utilisateur utilisateur) {
+        // Logique pour authentifier l'utilisateur
+        return "Token d'authentification";
     }
 
     //rajouter une methode de suppression logique des utilisateur
