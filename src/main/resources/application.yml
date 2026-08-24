@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: gestion-compte
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/comptes
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

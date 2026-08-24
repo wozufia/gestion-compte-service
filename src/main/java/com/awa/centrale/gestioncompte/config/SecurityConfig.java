@@ -14,13 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private static final String API_PREFIX = "/api/accounts/v1";
-	private static final String[] PUBLIC_ENDPOINTS = {
-			API_PREFIX + "/auth/register",
-			API_PREFIX + "/auth/login",
-			"/actuator/health"
-	};
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -29,10 +22,8 @@ public class SecurityConfig {
 				.httpBasic(AbstractHttpConfigurer::disable)
 				.formLogin(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-						.anyRequest().authenticated()
-				)
-				;
+						.anyRequest().permitAll()
+				);
 
 		return http.build();
 	}
