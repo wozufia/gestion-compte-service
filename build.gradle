@@ -8,6 +8,14 @@ plugins {
 
 repositories {
 	mavenCentral()
+//	maven {
+//		name = "GitHubPackages"
+//		url = uri("https://maven.pkg.github.com/wozufia/gestion-compte")
+//		credentials {
+//			username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+//			password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+//		}
+//	}
 }
 
 group = 'com.awa.centrale'
@@ -79,8 +87,7 @@ openApiGenerate {
 	inputSpec = contractSpecFile.get().asFile.absolutePath
 	outputDir = layout.buildDirectory.dir("generated").get().asFile.absolutePath
 	apiPackage = "com.awa.centrale.gestioncompte.api"
-	modelPackage = "com.awa.centrale.gestioncompte.model"
-//	invokerPackage = "com.awa.centrale.gestioncompte.invoker"
+	modelPackage = "com.awa.centrale.gestioncompte.dto"
 	skipOverwrite = false
 	generateModelTests = false
 	generateApiTests = false
@@ -88,7 +95,8 @@ openApiGenerate {
 	openapiNormalizer = ['REF_AS_PARENT_IN_ALLOF': 'true']
 	configOptions = [
 	        'useSpringBoot3': 'true',
-			'useTags': 'true'
+			'useTags': 'true',
+			'useLombok': 'true'
 	]
 	importMappings = [
 	        'java.time.OffsetDateTime': 'java.time.ZonedDateTime',
@@ -101,8 +109,9 @@ openApiGenerate {
 //			useJakartaEe: "true"
 			useBeanValidation: true,
 			skipDefaultInterface: true,
+			modelNameSuffix: 'Dto',
 			generatedConstructorWithRequiredArgs: false,
-			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @lombok.NoArgsConstructor; @lombok.experimental.SuperBuilder; @lombok.AllArgsConstructor;'
+			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @lombok.Data; @lombok.NoArgsConstructor; @lombok.AllArgsConstructor;'
 
 	])
 }

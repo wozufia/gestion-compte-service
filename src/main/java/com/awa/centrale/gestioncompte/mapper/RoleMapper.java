@@ -1,5 +1,6 @@
 package com.awa.centrale.gestioncompte.mapper;
 
+import com.awa.centrale.gestioncompte.dto.RoleDto;
 import com.awa.centrale.gestioncompte.model.Role;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -9,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface RoleMapper {
 
     @Mapping(target = "id", ignore = true)
-    Role toModel(com.awa.centrale.gestioncompte.dto.Role dto);
+    Role toModel(RoleDto dto);
 
-    List<Role> toModelList(List<com.awa.centrale.gestioncompte.dto.Role> dtoRoles);
+    List<Role> toModelList(List<RoleDto> dtoRoles);
 }

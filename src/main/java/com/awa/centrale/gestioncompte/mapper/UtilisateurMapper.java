@@ -1,5 +1,6 @@
 package com.awa.centrale.gestioncompte.mapper;
 
+import com.awa.centrale.gestioncompte.dto.UtilisateurDto;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,5 +9,5 @@ import org.mapstruct.Mapping;
 public interface UtilisateurMapper {
 
     @Mapping(target = "id", ignore = true)
-    Utilisateur toModel(com.awa.centrale.gestioncompte.dto.Utilisateur dto);
+    Utilisateur toModel(UtilisateurDto dto);
 }
