@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.6'
+	id 'org.springframework.boot' version '4.1.0'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.openapi.generator' version '7.5.0'
 	id 'maven-publish'
@@ -8,6 +8,14 @@ plugins {
 
 repositories {
 	mavenCentral()
+//	maven {
+//		name = "GitHubPackages"
+//		url = uri("https://maven.pkg.github.com/wozufia/gestion-compte")
+//		credentials {
+//			username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+//			password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+//		}
+//	}
 }
 
 group = 'com.awa.centrale'
@@ -46,14 +54,24 @@ publishing {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.mapstruct:mapstruct:1.6.3'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'
 	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+	//generateur de Jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	runtimeOnly 'com.h2database:h2'
 
 }
 
@@ -75,8 +93,7 @@ openApiGenerate {
 	inputSpec = contractSpecFile.get().asFile.absolutePath
 	outputDir = layout.buildDirectory.dir("generated").get().asFile.absolutePath
 	apiPackage = "com.awa.centrale.gestioncompte.api"
-	modelPackage = "com.awa.centrale.gestioncompte.model"
-//	invokerPackage = "com.awa.centrale.gestioncompte.invoker"
+	modelPackage = "com.awa.centrale.gestioncompte.dto"
 	skipOverwrite = false
 	generateModelTests = false
 	generateApiTests = false
@@ -84,7 +101,8 @@ openApiGenerate {
 	openapiNormalizer = ['REF_AS_PARENT_IN_ALLOF': 'true']
 	configOptions = [
 	        'useSpringBoot3': 'true',
-			'useTags': 'true'
+			'useTags': 'true',
+			'useLombok': 'true'
 	]
 	importMappings = [
 	        'java.time.OffsetDateTime': 'java.time.ZonedDateTime',
@@ -97,8 +115,9 @@ openApiGenerate {
 //			useJakartaEe: "true"
 			useBeanValidation: true,
 			skipDefaultInterface: true,
+			modelNameSuffix: 'Dto',
 			generatedConstructorWithRequiredArgs: false,
-			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @lombok.NoArgsConstructor; @lombok.experimental.SuperBuilder; @lombok.AllArgsConstructor;'
+			additionalModelTypeAnnotations: '@org.springframework.validation.annotation.Validated; @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true); @lombok.Data; @lombok.NoArgsConstructor; @lombok.AllArgsConstructor;'
 
 	])
 }

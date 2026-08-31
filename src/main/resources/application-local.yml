@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:file:./data/gestion-compte
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:database/schema.sql
+      data-locations: classpath:database/data.sql
