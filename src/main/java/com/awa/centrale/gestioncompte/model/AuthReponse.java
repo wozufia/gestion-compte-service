@@ -5,13 +5,9 @@ import lombok.Data;
 @Data
 public class AuthReponse {
 
-  private String accessToken;
-
-  private String refreshToken;
+  private String jwt;
 
   private String tokenType;
-
-  private Integer expiresIn;
 
 }
 

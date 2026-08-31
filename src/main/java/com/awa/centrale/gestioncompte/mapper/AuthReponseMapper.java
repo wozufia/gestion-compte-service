@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AuthReponseMapper {
 
-    AuthReponse toModel(AuthReponseDto dto);
+    AuthReponseDto toDto(AuthReponse model);
 }

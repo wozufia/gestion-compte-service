@@ -22,13 +22,13 @@ class RoleMapperTest {
     @Test
     void testMapRoleFromDto() {
         RoleDto dto = new RoleDto();
-        dto.setName("ADMIN");
-        dto.setDescription("Administrator Role");
+        dto.setName("ADMIN_API1");
+        dto.setDescription("Administrateur de l'application API1");
 
         Role model = roleMapper.toModel(dto);
 
-        assertEquals("ADMIN", model.getName());
-        assertEquals("Administrator Role", model.getDescription());
+        assertEquals("ADMIN_API1", model.getName());
+        assertEquals("Administrateur de l'application API1", model.getDescription());
         assertNull(model.getId());
     }
 

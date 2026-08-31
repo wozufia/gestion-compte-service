@@ -13,5 +13,9 @@ public class CreationUtilisateurRequete {
 
   private String motDePasse;
 
+  private String roles;
+
+  private String compte;
+
 }
 

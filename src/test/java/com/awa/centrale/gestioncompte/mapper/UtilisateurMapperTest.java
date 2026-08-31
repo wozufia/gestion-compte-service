@@ -1,17 +1,16 @@
 package com.awa.centrale.gestioncompte.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.awa.centrale.gestioncompte.dto.CompteDto;
 import com.awa.centrale.gestioncompte.dto.UtilisateurDto;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class UtilisateurMapperTest {
@@ -30,7 +29,6 @@ class UtilisateurMapperTest {
         dto.setLastName("Doe");
         dto.setActive(true);
         dto.setCompte(dtoCompte);
-        dto.setAdministrateur(false);
 
         Utilisateur model = utilisateurMapper.toModel(dto);
 
@@ -38,7 +36,6 @@ class UtilisateurMapperTest {
         assertEquals("John", model.getFirstName());
         assertEquals("Doe", model.getLastName());
         assertTrue(model.getActive());
-        assertFalse(model.getAdministrateur());
         assertNotNull(model.getCompte());
         assertEquals("Main Account", model.getCompte().getNom());
         assertNull(model.getId());

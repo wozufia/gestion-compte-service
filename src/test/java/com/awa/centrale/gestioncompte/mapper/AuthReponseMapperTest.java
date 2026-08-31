@@ -16,24 +16,20 @@ class AuthReponseMapperTest {
     private AuthReponseMapper authReponseMapper;
 
     @Test
-    void testMapAuthReponseFromDto() {
-        AuthReponseDto dto = new AuthReponseDto();
-        dto.setAccessToken("access_token_xyz");
-        dto.setRefreshToken("refresh_token_abc");
-        dto.setTokenType("Bearer");
-        dto.setExpiresIn(3600);
+    void testMapAuthReponseFromModel() {
+        AuthReponse model = new AuthReponse();
+        model.setJwt("access_token_xyz");
+        model.setTokenType("Bearer");
 
-        AuthReponse model = authReponseMapper.toModel(dto);
+        AuthReponseDto dto = authReponseMapper.toDto(model);
 
-        assertEquals("access_token_xyz", model.getAccessToken());
-        assertEquals("refresh_token_abc", model.getRefreshToken());
-        assertEquals("Bearer", model.getTokenType());
-        assertEquals(3600, model.getExpiresIn());
+        assertEquals("access_token_xyz", dto.getJwt());
+        assertEquals("Bearer", dto.getTokenType());
     }
 
     @Test
-    void testMapAuthReponseFromDtoNull() {
-        AuthReponse model = authReponseMapper.toModel(null);
-        assertNull(model);
+    void testMapAuthReponseFromModelNull() {
+        AuthReponseDto dto = authReponseMapper.toDto(null);
+        assertNull(dto);
     }
 }

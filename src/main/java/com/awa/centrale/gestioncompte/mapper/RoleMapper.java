@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface RoleMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "utilisateurs", ignore = true)
     Role toModel(RoleDto dto);
 
     List<Role> toModelList(List<RoleDto> dtoRoles);

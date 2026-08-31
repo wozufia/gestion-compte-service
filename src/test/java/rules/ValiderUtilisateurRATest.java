@@ -1,0 +1,76 @@
+package rules;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
+import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.model.Role;
+import com.awa.centrale.gestioncompte.model.Utilisateur;
+import java.util.Set;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class ValiderUtilisateurRATest {
+
+    @Mock
+    private UtilisateurDao utilisateurDao;
+
+    @Test
+    void obtenirNouveauxRoles_shouldReturnEmptySetWhenUserDoesNotExist() {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setEmail("new@example.com");
+        utilisateur.setRoles(Set.of());
+
+        when(utilisateurDao.obtenirUtilisateurParEmail("new@example.com")).thenReturn(null);
+
+        Set<Role> result = assertDoesNotThrow(() -> ValiderUtilisateurRA.obtenirNouveauxRoles(utilisateur, utilisateurDao));
+
+        assertEquals(Set.of(), result);
+    }
+
+    @Test
+    void obtenirNouveauxRoles_shouldThrowWhenExistingUserHasSameRole() {
+        Utilisateur newUser = new Utilisateur();
+        newUser.setEmail("existing@example.com");
+        Role newRole = new Role();
+        newRole.setName("USER_API0");
+        newUser.setRoles(Set.of(newRole));
+
+        Utilisateur existingUser = new Utilisateur();
+        existingUser.setEmail("existing@example.com");
+        Role existingRole = new Role();
+        existingRole.setName("USER_API0");
+        existingUser.setRoles(Set.of(existingRole));
+
+        when(utilisateurDao.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, utilisateurDao));
+    }
+
+    @Test
+    void obtenirNouveauxRolesUtilisateur_shouldReturnNewRolesWhenDifferent() {
+        Utilisateur newUser = new Utilisateur();
+        newUser.setEmail("mixed@example.com");
+        Role newRole = new Role();
+        newRole.setName("ADMIN_API1");
+        newUser.setRoles(Set.of(newRole));
+
+        Utilisateur existingUser = new Utilisateur();
+        existingUser.setEmail("mixed@example.com");
+        Role existingRole = new Role();
+        existingRole.setName("USER_API0");
+        existingUser.setRoles(Set.of(existingRole));
+
+        when(utilisateurDao.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(existingUser);
+
+        Set<Role> result = ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, utilisateurDao);
+
+        assertEquals(Set.of(newRole,existingRole), result);
+    }
+}
