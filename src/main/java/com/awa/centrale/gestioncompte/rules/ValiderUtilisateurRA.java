@@ -1,4 +1,4 @@
-package rules;
+package com.awa.centrale.gestioncompte.rules;
 
 import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
 import com.awa.centrale.gestioncompte.model.Role;

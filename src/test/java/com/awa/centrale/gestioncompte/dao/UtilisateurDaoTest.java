@@ -60,6 +60,22 @@ class UtilisateurDaoTest {
     }
 
     @Test
+    void obtenirUtilisateurParId_shouldDelegateToRepository() {
+        Utilisateur expected = new Utilisateur();
+        expected.setId(42);
+        expected.setEmail("id-user@example.com");
+
+        when(utilisateurRepository.findById(42)).thenReturn(expected);
+
+        Utilisateur result = utilisateurDao.obtenirUtilisateurParId(42);
+
+        assertNotNull(result);
+        assertEquals(42, result.getId());
+        assertEquals("id-user@example.com", result.getEmail());
+        verify(utilisateurRepository).findById(42);
+    }
+
+    @Test
     void sauvegarderUtilisateur_shouldDelegateToRepositorySave() {
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setEmail("save@example.com");

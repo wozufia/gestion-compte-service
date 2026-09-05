@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-import static rules.GestionRolesRA.listerRolesDeRequete;
-import static rules.GestionRolesRA.obtenirRolesDeRequete;
-import static rules.ValiderUtilisateurRA.obtenirNouveauxRoles;
+import static com.awa.centrale.gestioncompte.rules.GestionRolesRA.listerRolesDeRequete;
+import static com.awa.centrale.gestioncompte.rules.GestionRolesRA.obtenirRolesDeRequete;
+import static com.awa.centrale.gestioncompte.rules.ValiderUtilisateurRA.obtenirNouveauxRoles;
 
 @Service
 public class CreerUtilisateurService {

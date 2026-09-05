@@ -1,18 +1,19 @@
-package rules;
+package com.awa.centrale.gestioncompte.rules;
+
+import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.model.Role;
+import com.awa.centrale.gestioncompte.model.Utilisateur;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
-import com.awa.centrale.gestioncompte.model.Role;
-import com.awa.centrale.gestioncompte.model.Utilisateur;
-import java.util.Set;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ValiderUtilisateurRATest {
