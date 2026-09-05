@@ -28,7 +28,7 @@ class TestIntegrationUtilisateurDao {
         assertEquals("passWord123", utilisateur.getMotDePasse());
         assertNotNull(utilisateur.getRoles());
         assertFalse(utilisateur.getRoles().isEmpty());
-        List<String> roleNames = utilisateur.getRoles().stream().map(Role::getName).toList();
+        List<String> roleNames = utilisateur.getRoles().stream().map(Role::getNom).toList();
         assertEquals(List.of("ADMIN", "USAGER"), roleNames);
     }
 }

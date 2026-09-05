@@ -2,6 +2,8 @@ package com.awa.centrale.gestioncompte.controller;
 
 import com.awa.centrale.gestioncompte.dto.CompteDto;
 import com.awa.centrale.gestioncompte.dto.CreationCompteRequeteDto;
+import com.awa.centrale.gestioncompte.dto.ModifierCompteRequeteDto;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,5 +22,16 @@ public class GestionComptesController {
     public CompteDto rechercherCompte(@PathVariable int id) {
         // Logique pour rechercher un utilisateur par ID
         return null;
+    }
+
+    @PostMapping("/compte/{id}")
+    public CompteDto modifierCompte(@PathVariable int id, @RequestBody ModifierCompteRequeteDto compte) {
+        // Logique pour modifier un utilisateur par ID
+        return null;
+    }
+
+    @DeleteMapping("/compte/{id}")
+    public void supprimerCompte(@PathVariable int id) {
+        // Logique pour supprimer un utilisateur par ID
     }
 }

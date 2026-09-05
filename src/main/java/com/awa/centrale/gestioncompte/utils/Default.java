@@ -9,7 +9,7 @@ public final class Default {
 
     public static Role defaultRole() {
         Role role = new Role();
-        role.setName(USER_ROLE_NAME);
+        role.setNom(USER_ROLE_NAME);
         role.setDescription(USER_ROLE_DESCRIPTION);
         return role;
     }

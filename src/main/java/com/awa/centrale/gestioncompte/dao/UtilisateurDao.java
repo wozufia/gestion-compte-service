@@ -3,6 +3,7 @@ package com.awa.centrale.gestioncompte.dao;
 import com.awa.centrale.gestioncompte.model.Role;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -51,10 +52,22 @@ public class UtilisateurDao {
         return utilisateurRepository.save(utilisateur);
     }
 
+    public List<Role> listerRoles() {
+        return roleRepository.findAll();
+    }
+
+    public Role sauverRole(Role role) {
+        Role roleExistant = roleRepository.findByNom(role.getNom());
+        if (roleExistant == null) {
+            roleRepository.save(role);
+        }
+        roleRepository.save(role);
+        return role;
+    }
     private void sauverRolesSiNonExistant(Set<Role> roles) {
         for (Role roleCandidat : roles) {
-            String nomRole = roleCandidat.getName();
-            Role role = roleRepository.findByName(nomRole);
+            String nomRole = roleCandidat.getNom();
+            Role role = roleRepository.findByNom(nomRole);
             if (role == null) {
                 roleRepository.save(roleCandidat);
             }

@@ -42,7 +42,7 @@ public class ConnectionUtilisateurService {
         List<String> roles = utilisateur.getRoles() == null
                 ? List.of()
                 : utilisateur.getRoles().stream()
-                        .map(Role::getName)
+                        .map(Role::getNom)
                         .toList();
 
         claims.put("roles", roles);

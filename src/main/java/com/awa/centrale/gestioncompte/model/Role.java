@@ -23,7 +23,7 @@ public class Role {
   private Integer id;
 
   @Column(nullable = false, unique = true)
-  private String name;
+  private String nom;
 
   private String description;
 
@@ -40,11 +40,11 @@ public class Role {
     if (!(o instanceof Role role)) {
       return false;
     }
-    return name != null && name.equals(role.name);
+    return nom != null && nom.equals(role.nom);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(nom);
   }
 }

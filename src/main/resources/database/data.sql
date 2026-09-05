@@ -1,4 +1,4 @@
-INSERT INTO role (name, description) VALUES
+INSERT INTO role (nom, description) VALUES
     ('ADMIN', 'Administrateur de la plateforme'),
     ('USAGER', 'Utilisateur public');
 
@@ -23,6 +23,6 @@ INSERT INTO utilisateur (email, first_name, last_name, mot_de_passe, active, com
 
 INSERT INTO utilisateur_role (utilisateur_id, role_id) VALUES
     ((SELECT id FROM utilisateur WHERE email = 'test@gestion-compte.com'),
-     (SELECT id FROM role WHERE name = 'ADMIN')),
+     (SELECT id FROM role WHERE nom = 'ADMIN')),
     ((SELECT id FROM utilisateur WHERE email = 'test@gestion-compte.com'),
-     (SELECT id FROM role WHERE name = 'USAGER'));
+     (SELECT id FROM role WHERE nom = 'USAGER'));
