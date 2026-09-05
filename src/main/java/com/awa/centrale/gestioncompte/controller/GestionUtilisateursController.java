@@ -8,12 +8,16 @@ import com.awa.centrale.gestioncompte.dto.UtilisateurDto;
 import com.awa.centrale.gestioncompte.mapper.AuthReponseMapper;
 import com.awa.centrale.gestioncompte.mapper.ConnectionRequeteMapper;
 import com.awa.centrale.gestioncompte.mapper.CreationUtilisateurRequeteMapper;
+import com.awa.centrale.gestioncompte.mapper.ModifierUtilisateurRequeteMapper;
 import com.awa.centrale.gestioncompte.mapper.UtilisateurMapper;
 import com.awa.centrale.gestioncompte.model.AuthReponse;
 import com.awa.centrale.gestioncompte.model.CreationUtilisateurRequete;
+import com.awa.centrale.gestioncompte.model.ModifierUtilisateurRequete;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import com.awa.centrale.gestioncompte.service.utilisateur.ConnectionUtilisateurService;
 import com.awa.centrale.gestioncompte.service.utilisateur.CreerUtilisateurService;
+import com.awa.centrale.gestioncompte.service.utilisateur.ModifierUtilisateurService;
+import com.awa.centrale.gestioncompte.service.utilisateur.RechercheUtilisateurService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +35,16 @@ public class GestionUtilisateursController {
     private final AuthReponseMapper authReponseMapper;
     private final UtilisateurMapper utilisateurMapper;
     private final CreationUtilisateurRequeteMapper creationUtilisateurRequeteMapper;
+    private final ModifierUtilisateurRequeteMapper modifierUtilisateurRequeteMapper;
 
     private final ConnectionUtilisateurService connectionUtilisateurService;
     private final CreerUtilisateurService creerUtilisateurService;
+    private final RechercheUtilisateurService rechercheUtilisateurService;
+    private final ModifierUtilisateurService modifierUtilisateurService;
+
 
     @PostMapping("/auth/login")
-    public AuthReponseDto connecterUtilisateur(@RequestBody ConnectionRequeteDto connectionRequete) throws Exception {
+    public AuthReponseDto connecterUtilisateur(@RequestBody ConnectionRequeteDto connectionRequete) {
         AuthReponse connectionReponse = connectionUtilisateurService.genererToken(connectionRequeteMapper.toModel(connectionRequete));
 
         return authReponseMapper.toDto(connectionReponse);
@@ -51,14 +59,15 @@ public class GestionUtilisateursController {
 
     @GetMapping("/usagers/{id}")
     public UtilisateurDto rechercherUtilisateur(@PathVariable int id) {
-        // Logique pour rechercher un utilisateur par ID
-        return null;
+        Utilisateur utilisateur = rechercheUtilisateurService.obtenirUtilisateur(id);
+        return utilisateurMapper.toDto(utilisateur);
     }
 
     @PatchMapping("/usagers/{id}")
-    public UtilisateurDto modifierUtilisateur(@PathVariable int id, @RequestBody ModifierUtilisateurRequeteDto ModifierUtilisateurRequete) {
-        // Logique pour modifier un utilisateur
-        return null;
+    public UtilisateurDto modifierUtilisateur(@PathVariable int id, @RequestBody ModifierUtilisateurRequeteDto modifierUtilisateurRequeteDto) {
+        ModifierUtilisateurRequete modifierUtilisateurRequete = modifierUtilisateurRequeteMapper.toModel(modifierUtilisateurRequeteDto);
+        Utilisateur utilisateur = modifierUtilisateurService.modifierUtilisateur(id, modifierUtilisateurRequete);
+        return utilisateurMapper.toDto(utilisateur);
     }
 
     @DeleteMapping("/usagers/{id}")

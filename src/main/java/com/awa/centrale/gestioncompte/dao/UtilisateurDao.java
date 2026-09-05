@@ -6,9 +6,11 @@ import com.awa.centrale.gestioncompte.model.Utilisateur;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class UtilisateurDao {
 
     private final UtilisateurRepository utilisateurRepository;
@@ -22,6 +24,9 @@ public class UtilisateurDao {
         return utilisateurRepository.findByEmail(email);
     }
 
+    public Utilisateur obtenirUtilisateurParId(int id) {
+        return utilisateurRepository.findById(id);
+    }
     public Utilisateur SauvegarderUtilisateur(Utilisateur utilisateur) {
         if (utilisateur.getRoles() != null) {
             SauverRolesSiNonExistant(utilisateur.getRoles());

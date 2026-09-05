@@ -47,7 +47,7 @@ public class Utilisateur {
   @EqualsAndHashCode.Exclude
   private Set<Role> roles;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "compte_id")
   private Compte compte;
 
