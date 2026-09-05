@@ -49,7 +49,7 @@ class ModifierUtilisateurServiceTest {
         updatedUser.setMotDePasse("NouveauMotDePasse123");
 
         when(utilisateurDao.obtenirUtilisateurParId(userId)).thenReturn(existingUser);
-        when(utilisateurDao.SauvegarderUtilisateur(any(Utilisateur.class))).thenReturn(updatedUser);
+        when(utilisateurDao.sauvegarderUtilisateur(any(Utilisateur.class))).thenReturn(updatedUser);
 
         Utilisateur result = modifierUtilisateurService.modifierUtilisateur(userId, requete);
 
@@ -58,7 +58,7 @@ class ModifierUtilisateurServiceTest {
         assertEquals("Nom", result.getLastName());
         assertEquals("NouveauMotDePasse123", result.getMotDePasse());
         verify(utilisateurDao).obtenirUtilisateurParId(userId);
-        verify(utilisateurDao).SauvegarderUtilisateur(existingUser);
+        verify(utilisateurDao).sauvegarderUtilisateur(existingUser);
     }
 
     @Test

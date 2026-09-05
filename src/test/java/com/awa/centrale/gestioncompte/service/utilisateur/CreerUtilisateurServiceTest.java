@@ -7,6 +7,7 @@ import com.awa.centrale.gestioncompte.model.Utilisateur;
 import com.awa.centrale.gestioncompte.utils.Default;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,7 +42,7 @@ class CreerUtilisateurServiceTest {
         requete.setRoles(null);
 
         when(utilisateurDao.obtenirUtilisateurParEmail("user@example.com")).thenReturn(null);
-        when(utilisateurDao.SauvegarderUtilisateur(any())).thenAnswer(invocation -> {
+        when(utilisateurDao.sauvegarderUtilisateur(any())).thenAnswer(invocation -> {
             Utilisateur utilisateurArg = invocation.getArgument(0);
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setEmail(utilisateurArg.getEmail());
@@ -56,7 +57,7 @@ class CreerUtilisateurServiceTest {
         assertNotNull(utilisateur);
         assertNotNull(utilisateur.getRoles());
         assertEquals(Set.of(Default.USER_ROLE_NAME), utilisateur.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
-        verify(utilisateurDao).SauvegarderUtilisateur(any(Utilisateur.class));
+        verify(utilisateurDao).sauvegarderUtilisateur(any(Utilisateur.class));
     }
 
     @Test
@@ -69,7 +70,7 @@ class CreerUtilisateurServiceTest {
         requete.setRoles("ADMIN, USER, ADMIN");
 
         when(utilisateurDao.obtenirUtilisateurParEmail("admin@example.com")).thenReturn(null);
-        when(utilisateurDao.SauvegarderUtilisateur(any())).thenAnswer(invocation -> {
+        when(utilisateurDao.sauvegarderUtilisateur(any())).thenAnswer(invocation -> {
             Utilisateur utilisateurArg = invocation.getArgument(0);
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setEmail(utilisateurArg.getEmail());
@@ -85,7 +86,7 @@ class CreerUtilisateurServiceTest {
 
         assertNotNull(utilisateur.getRoles());
         assertEquals(Set.of("ADMIN", "USER"), utilisateur.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
-        verify(utilisateurDao).SauvegarderUtilisateur(any(Utilisateur.class));
+        verify(utilisateurDao).sauvegarderUtilisateur(any(Utilisateur.class));
     }
 
     @Test
@@ -114,7 +115,7 @@ class CreerUtilisateurServiceTest {
                 "Un utilisateur existant possède déjà un rôle identique à celui que vous tentez de créer.",
                 exception.getMessage()
         );
-        verify(utilisateurDao, never()).SauvegarderUtilisateur(any(Utilisateur.class));
+        verify(utilisateurDao, never()).sauvegarderUtilisateur(any(Utilisateur.class));
         verify(utilisateurDao, never()).ajouterRolesAUtilisateurEtActiver(any(), any());
     }
 
@@ -148,6 +149,6 @@ class CreerUtilisateurServiceTest {
 
         assertNotNull(utilisateur);
         assertEquals(Set.of("ADMIN", "USER"), utilisateur.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
-        verify(utilisateurDao).ajouterRolesAUtilisateurEtActiver(any(String.class), any(Set.class));
+        verify(utilisateurDao).ajouterRolesAUtilisateurEtActiver(any(String.class), ArgumentMatchers.<Set<Role>>any());
     }
 }
