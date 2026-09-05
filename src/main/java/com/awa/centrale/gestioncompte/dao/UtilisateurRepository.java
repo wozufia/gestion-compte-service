@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Integer> {
 
-    Utilisateur findByEmailAndMotDePasse(String email, String motDePasse);
+    Utilisateur findByEmailAndMotDePasseAndActiveTrue(String email, String motDePasse);
 
-    Utilisateur findByEmail(String email);
+    Utilisateur findByEmailAndActiveTrue(String email);
 
-    Utilisateur findById(int id);
+    Utilisateur findByIdAndActiveTrue(int id);
 
 }

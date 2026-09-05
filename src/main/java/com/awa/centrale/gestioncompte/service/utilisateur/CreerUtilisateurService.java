@@ -34,7 +34,7 @@ public class CreerUtilisateurService {
 
     private Utilisateur creerNouvelUtilisateur(Utilisateur utilisateur) {
 
-        return utilisateurDao.SauvegarderUtilisateur(utilisateur);
+        return utilisateurDao.sauvegarderUtilisateur(utilisateur);
     }
 
     private Utilisateur ajouterRolesAUtilisateurExistant(Utilisateur utilisateur, Utilisateur utilisateurExistant) {

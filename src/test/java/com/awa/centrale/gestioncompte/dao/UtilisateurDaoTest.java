@@ -36,13 +36,13 @@ class UtilisateurDaoTest {
         expected.setEmail("user@example.com");
         expected.setMotDePasse("Secret123");
 
-        when(utilisateurRepository.findByEmailAndMotDePasse("user@example.com", "Secret123")).thenReturn(expected);
+        when(utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue("user@example.com", "Secret123")).thenReturn(expected);
 
         Utilisateur result = utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse("user@example.com", "Secret123");
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
-        verify(utilisateurRepository).findByEmailAndMotDePasse("user@example.com", "Secret123");
+        verify(utilisateurRepository).findByEmailAndMotDePasseAndActiveTrue("user@example.com", "Secret123");
     }
 
     @Test
@@ -50,13 +50,13 @@ class UtilisateurDaoTest {
         Utilisateur expected = new Utilisateur();
         expected.setEmail("user@example.com");
 
-        when(utilisateurRepository.findByEmail("user@example.com")).thenReturn(expected);
+        when(utilisateurRepository.findByEmailAndActiveTrue("user@example.com")).thenReturn(expected);
 
         Utilisateur result = utilisateurDao.obtenirUtilisateurParEmail("user@example.com");
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
-        verify(utilisateurRepository).findByEmail("user@example.com");
+        verify(utilisateurRepository).findByEmailAndActiveTrue("user@example.com");
     }
 
     @Test
@@ -65,14 +65,14 @@ class UtilisateurDaoTest {
         expected.setId(42);
         expected.setEmail("id-user@example.com");
 
-        when(utilisateurRepository.findById(42)).thenReturn(expected);
+        when(utilisateurRepository.findByIdAndActiveTrue(42)).thenReturn(expected);
 
         Utilisateur result = utilisateurDao.obtenirUtilisateurParId(42);
 
         assertNotNull(result);
         assertEquals(42, result.getId());
         assertEquals("id-user@example.com", result.getEmail());
-        verify(utilisateurRepository).findById(42);
+        verify(utilisateurRepository).findByIdAndActiveTrue(42);
     }
 
     @Test
@@ -83,7 +83,7 @@ class UtilisateurDaoTest {
 
         when(utilisateurRepository.save(utilisateur)).thenReturn(utilisateur);
 
-        Utilisateur result = utilisateurDao.SauvegarderUtilisateur(utilisateur);
+        Utilisateur result = utilisateurDao.sauvegarderUtilisateur(utilisateur);
 
         assertNotNull(result);
         assertEquals("save@example.com", result.getEmail());
@@ -103,7 +103,7 @@ class UtilisateurDaoTest {
         roles.add(adminRole);
         roles.add(userRole);
 
-        when(utilisateurRepository.findByEmail("user@example.com")).thenReturn(existing);
+        when(utilisateurRepository.findByEmailAndActiveTrue("user@example.com")).thenReturn(existing);
         when(utilisateurRepository.save(existing)).thenReturn(existing);
 
         Utilisateur result = utilisateurDao.ajouterRolesAUtilisateurEtActiver("user@example.com", roles);
@@ -112,13 +112,13 @@ class UtilisateurDaoTest {
         assertEquals("user@example.com", result.getEmail());
         assertEquals(Boolean.TRUE, result.getActive());
         assertEquals(2, result.getRoles().size());
-        verify(utilisateurRepository).findByEmail("user@example.com");
+        verify(utilisateurRepository).findByEmailAndActiveTrue("user@example.com");
         verify(utilisateurRepository).save(existing);
     }
 
     @Test
     void obtenirUtilisateurParEmailEtMotDePasse_shouldReturnNullWhenNotFound() {
-        when(utilisateurRepository.findByEmailAndMotDePasse("missing@example.com", "badpass")).thenReturn(null);
+        when(utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue("missing@example.com", "badpass")).thenReturn(null);
 
         Utilisateur result = utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse("missing@example.com", "badpass");
 

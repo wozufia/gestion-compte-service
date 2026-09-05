@@ -18,6 +18,7 @@ import com.awa.centrale.gestioncompte.service.utilisateur.ConnectionUtilisateurS
 import com.awa.centrale.gestioncompte.service.utilisateur.CreerUtilisateurService;
 import com.awa.centrale.gestioncompte.service.utilisateur.ModifierUtilisateurService;
 import com.awa.centrale.gestioncompte.service.utilisateur.RechercheUtilisateurService;
+import com.awa.centrale.gestioncompte.service.utilisateur.SupprimerUtilisateurService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class GestionUtilisateursController {
     private final CreerUtilisateurService creerUtilisateurService;
     private final RechercheUtilisateurService rechercheUtilisateurService;
     private final ModifierUtilisateurService modifierUtilisateurService;
+    private final SupprimerUtilisateurService supprimerUtilisateurService;
 
 
     @PostMapping("/auth/login")
@@ -72,7 +74,7 @@ public class GestionUtilisateursController {
 
     @DeleteMapping("/usagers/{id}")
     public void supprimerUtilisateur(@PathVariable int id) {
-        // Logique pour supprimer un utilisateur
+        supprimerUtilisateurService.supprimerUtilisateur(id);
     }
 
 }

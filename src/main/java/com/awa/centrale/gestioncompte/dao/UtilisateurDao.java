@@ -17,32 +17,33 @@ public class UtilisateurDao {
     private final RoleRepository roleRepository;
 
     public Utilisateur obtenirUtilisateurParEmailEtMotDePasse(String email, String motDePasse) {
-        return utilisateurRepository.findByEmailAndMotDePasse(email, motDePasse);
+        return utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue(email, motDePasse);
     }
 
     public Utilisateur obtenirUtilisateurParEmail(String email) {
-        return utilisateurRepository.findByEmail(email);
+        return utilisateurRepository.findByEmailAndActiveTrue(email);
     }
 
     public Utilisateur obtenirUtilisateurParId(int id) {
-        return utilisateurRepository.findById(id);
+        return utilisateurRepository.findByIdAndActiveTrue(id);
     }
-    public Utilisateur SauvegarderUtilisateur(Utilisateur utilisateur) {
+
+    public Utilisateur sauvegarderUtilisateur(Utilisateur utilisateur) {
         if (utilisateur.getRoles() != null) {
-            SauverRolesSiNonExistant(utilisateur.getRoles());
+            sauverRolesSiNonExistant(utilisateur.getRoles());
         }
         return utilisateurRepository.save(utilisateur);
     }
 
     public Utilisateur ajouterRolesAUtilisateurEtActiver(String email, Set<Role> roles) {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
+        Utilisateur utilisateur = utilisateurRepository.findByEmailAndActiveTrue(email);
         if (utilisateur == null) {
             utilisateur = new Utilisateur();
             utilisateur.setEmail(email);
         }
 
         if (roles != null) {
-            SauverRolesSiNonExistant(roles);
+            sauverRolesSiNonExistant(roles);
         }
 
         utilisateur.setRoles(roles);
@@ -50,7 +51,7 @@ public class UtilisateurDao {
         return utilisateurRepository.save(utilisateur);
     }
 
-    private void SauverRolesSiNonExistant(Set<Role> roles) {
+    private void sauverRolesSiNonExistant(Set<Role> roles) {
         for (Role roleCandidat : roles) {
             String nomRole = roleCandidat.getName();
             Role role = roleRepository.findByName(nomRole);
