@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CreationRoleRequete {
 
-  private String name;
+  private String nom;
 
   private String description;
 

@@ -19,7 +19,7 @@ class GestionRolesRATest {
 
         assertNotNull(roles);
         assertEquals(1, roles.size());
-        assertTrue(roles.stream().anyMatch(role -> Default.USER_ROLE_NAME.equals(role.getName())));
+        assertTrue(roles.stream().anyMatch(role -> Default.USER_ROLE_NAME.equals(role.getNom())));
     }
 
     @Test
@@ -28,7 +28,7 @@ class GestionRolesRATest {
 
         Set<Role> roles = GestionRolesRA.obtenirRolesDeRequete(input);
 
-        assertEquals(Set.of("ADMIN", "USER"), roles.stream().map(Role::getName).collect(Collectors.toSet()));
+        assertEquals(Set.of("ADMIN", "USER"), roles.stream().map(Role::getNom).collect(Collectors.toSet()));
     }
 
     @Test

@@ -39,13 +39,13 @@ class ValiderUtilisateurRATest {
         Utilisateur newUser = new Utilisateur();
         newUser.setEmail("existing@example.com");
         Role newRole = new Role();
-        newRole.setName("USER_API0");
+        newRole.setNom("USER_API0");
         newUser.setRoles(Set.of(newRole));
 
         Utilisateur existingUser = new Utilisateur();
         existingUser.setEmail("existing@example.com");
         Role existingRole = new Role();
-        existingRole.setName("USER_API0");
+        existingRole.setNom("USER_API0");
         existingUser.setRoles(Set.of(existingRole));
 
         when(utilisateurDao.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
@@ -59,13 +59,13 @@ class ValiderUtilisateurRATest {
         Utilisateur newUser = new Utilisateur();
         newUser.setEmail("mixed@example.com");
         Role newRole = new Role();
-        newRole.setName("ADMIN_API1");
+        newRole.setNom("ADMIN_API1");
         newUser.setRoles(Set.of(newRole));
 
         Utilisateur existingUser = new Utilisateur();
         existingUser.setEmail("mixed@example.com");
         Role existingRole = new Role();
-        existingRole.setName("USER_API0");
+        existingRole.setNom("USER_API0");
         existingUser.setRoles(Set.of(existingRole));
 
         when(utilisateurDao.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(existingUser);

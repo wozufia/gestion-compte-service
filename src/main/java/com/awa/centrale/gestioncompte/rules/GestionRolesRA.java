@@ -30,7 +30,7 @@ public class GestionRolesRA {
             }
 
             Role role = new Role();
-            role.setName(roleKey);
+            role.setNom(roleKey);
             role.setDescription(descriptionRole(roleKey));
             roleList.add(role);
         }

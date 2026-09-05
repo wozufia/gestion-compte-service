@@ -22,12 +22,12 @@ class RoleMapperTest {
     @Test
     void testMapRoleFromDto() {
         RoleDto dto = new RoleDto();
-        dto.setName("ADMIN_API1");
+        dto.setNom("ADMIN_API1");
         dto.setDescription("Administrateur de l'application API1");
 
         Role model = roleMapper.toModel(dto);
 
-        assertEquals("ADMIN_API1", model.getName());
+        assertEquals("ADMIN_API1", model.getNom());
         assertEquals("Administrateur de l'application API1", model.getDescription());
         assertNull(model.getId());
     }
@@ -41,11 +41,11 @@ class RoleMapperTest {
     @Test
     void testMapRoleListFromDto() {
         RoleDto dtoRole1 = new RoleDto();
-        dtoRole1.setName("ADMIN");
+        dtoRole1.setNom("ADMIN");
         dtoRole1.setDescription("Admin");
 
         RoleDto dtoRole2 = new RoleDto();
-        dtoRole2.setName("USER");
+        dtoRole2.setNom("USER");
         dtoRole2.setDescription("User");
 
         List<RoleDto> dtoRoles = Arrays.asList(dtoRole1, dtoRole2);
@@ -54,8 +54,8 @@ class RoleMapperTest {
 
         assertNotNull(models);
         assertEquals(2, models.size());
-        assertEquals("ADMIN", models.get(0).getName());
-        assertEquals("USER", models.get(1).getName());
+        assertEquals("ADMIN", models.get(0).getNom());
+        assertEquals("USER", models.get(1).getNom());
     }
 
     @Test

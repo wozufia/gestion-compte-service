@@ -18,12 +18,12 @@ class CreationRoleRequeteMapperTest {
     @Test
     void testMapCreationRoleRequeteFromDto() {
         CreationRoleRequeteDto dto = new CreationRoleRequeteDto();
-        dto.setName("MODERATOR");
+        dto.setNom("MODERATOR");
         dto.setDescription("Moderator Role");
 
         CreationRoleRequete model = creationRoleRequeteMapper.toModel(dto);
 
-        assertEquals("MODERATOR", model.getName());
+        assertEquals("MODERATOR", model.getNom());
         assertEquals("Moderator Role", model.getDescription());
     }
 

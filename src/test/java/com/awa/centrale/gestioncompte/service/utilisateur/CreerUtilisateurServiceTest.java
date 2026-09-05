@@ -47,7 +47,7 @@ class CreerUtilisateurServiceTest {
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setEmail(utilisateurArg.getEmail());
             Role role = new Role();
-            role.setName(Default.USER_ROLE_NAME);
+            role.setNom(Default.USER_ROLE_NAME);
             utilisateur.setRoles(Set.of(role));
             return utilisateur;
         });
@@ -56,7 +56,7 @@ class CreerUtilisateurServiceTest {
 
         assertNotNull(utilisateur);
         assertNotNull(utilisateur.getRoles());
-        assertEquals(Set.of(Default.USER_ROLE_NAME), utilisateur.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+        assertEquals(Set.of(Default.USER_ROLE_NAME), utilisateur.getRoles().stream().map(Role::getNom).collect(Collectors.toSet()));
         verify(utilisateurDao).sauvegarderUtilisateur(any(Utilisateur.class));
     }
 
@@ -75,9 +75,9 @@ class CreerUtilisateurServiceTest {
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setEmail(utilisateurArg.getEmail());
             Role adminRole = new Role();
-            adminRole.setName("ADMIN");
+            adminRole.setNom("ADMIN");
             Role userRole = new Role();
-            userRole.setName("USER");
+            userRole.setNom("USER");
             utilisateur.setRoles(Set.of(adminRole, userRole));
             return utilisateur;
         });
@@ -85,7 +85,7 @@ class CreerUtilisateurServiceTest {
         Utilisateur utilisateur = creerUtilisateurService.creerUtilisateur(requete);
 
         assertNotNull(utilisateur.getRoles());
-        assertEquals(Set.of("ADMIN", "USER"), utilisateur.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+        assertEquals(Set.of("ADMIN", "USER"), utilisateur.getRoles().stream().map(Role::getNom).collect(Collectors.toSet()));
         verify(utilisateurDao).sauvegarderUtilisateur(any(Utilisateur.class));
     }
 
@@ -101,7 +101,7 @@ class CreerUtilisateurServiceTest {
         Utilisateur existingUser = new Utilisateur();
         existingUser.setEmail("existing@example.com");
         Role existingRole = new Role();
-        existingRole.setName("USER");
+        existingRole.setNom("USER");
         existingUser.setRoles(Set.of(existingRole));
 
         when(utilisateurDao.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
@@ -131,15 +131,15 @@ class CreerUtilisateurServiceTest {
         Utilisateur utilisateurExistant = new Utilisateur();
         utilisateurExistant.setEmail("mixed@example.com");
         Role existingRole = new Role();
-        existingRole.setName("USER");
+        existingRole.setNom("USER");
         utilisateurExistant.setRoles(Set.of(existingRole));
 
         Utilisateur utilisateurAttendu= new Utilisateur();
         utilisateurAttendu.setEmail("mixed@example.com");
         Role utilisateurAttenduRole1 = new Role();
-        utilisateurAttenduRole1.setName("ADMIN");
+        utilisateurAttenduRole1.setNom("ADMIN");
         Role utilisateurAttenduRole2 = new Role();
-        utilisateurAttenduRole2.setName("USER");
+        utilisateurAttenduRole2.setNom("USER");
         utilisateurAttendu.setRoles(Set.of(utilisateurAttenduRole1, utilisateurAttenduRole2));
 
         when(utilisateurDao.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(utilisateurExistant);
@@ -148,7 +148,7 @@ class CreerUtilisateurServiceTest {
         Utilisateur utilisateur = creerUtilisateurService.creerUtilisateur(requete);
 
         assertNotNull(utilisateur);
-        assertEquals(Set.of("ADMIN", "USER"), utilisateur.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+        assertEquals(Set.of("ADMIN", "USER"), utilisateur.getRoles().stream().map(Role::getNom).collect(Collectors.toSet()));
         verify(utilisateurDao).ajouterRolesAUtilisateurEtActiver(any(String.class), ArgumentMatchers.<Set<Role>>any());
     }
 }

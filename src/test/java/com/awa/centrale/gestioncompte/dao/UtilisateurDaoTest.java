@@ -97,9 +97,9 @@ class UtilisateurDaoTest {
         existing.setActive(false);
         Set<Role> roles = new HashSet<>();
         Role adminRole = new Role();
-        adminRole.setName("ADMIN");
+        adminRole.setNom("ADMIN");
         Role userRole = new Role();
-        userRole.setName("USER");
+        userRole.setNom("USER");
         roles.add(adminRole);
         roles.add(userRole);
 
