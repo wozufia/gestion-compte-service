@@ -57,6 +57,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.mapstruct:mapstruct:1.6.3'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -67,10 +68,11 @@ dependencies {
 	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'
 	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
-	//generateur de Jwt
+	// Generateur de Jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	// H2 base de données en mémoire pour les tests
 	runtimeOnly 'com.h2database:h2'
 
 }
