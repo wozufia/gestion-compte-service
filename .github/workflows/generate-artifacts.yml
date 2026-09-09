@@ -1,0 +1,45 @@
+name: Generate artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Generate sources and run tests
+        run: ./gradlew clean build
+
+      - name: Upload generated sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-sources
+          path: build/generated/src/main/java
+          if-no-files-found: error
+
+      - name: Upload build reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: build/reports
+          if-no-files-found: ignore
