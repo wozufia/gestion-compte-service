@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.utilisateur;
 
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.ModifierUtilisateurRequete;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ModifierUtilisateurService {
     @Autowired
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     public Utilisateur modifierUtilisateur(int id, ModifierUtilisateurRequete modifierUtilisateurRequete) {
-        Utilisateur utilisateur = utilisateurDao.obtenirUtilisateurParId(id);
+        Utilisateur utilisateur = gestionAccesRepository.obtenirUtilisateurParId(id);
 
         if (utilisateur != null) {
             utilisateur.setFirstName(modifierUtilisateurRequete.getFirstName());
             utilisateur.setLastName(modifierUtilisateurRequete.getLastName());
             utilisateur.setMotDePasse(modifierUtilisateurRequete.getMotDePasse());
-            return utilisateurDao.sauvegarderUtilisateur(utilisateur);
+            return gestionAccesRepository.sauvegarderUtilisateur(utilisateur);
         } else {
             throw new EntityNotFoundException("Utilisateur non trouvé avec l'ID: " + id);
         }

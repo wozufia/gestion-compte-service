@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.rules;
 
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.Role;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import java.util.HashSet;
@@ -8,8 +8,8 @@ import java.util.Set;
 
 public class ValiderUtilisateurRA {
 
-    public static Set<Role> obtenirNouveauxRoles(Utilisateur utilisateur, UtilisateurDao utilisateurDao) {
-        Utilisateur utilisateurExistant = utilisateurDao.obtenirUtilisateurParEmail(utilisateur.getEmail());
+    public static Set<Role> obtenirNouveauxRoles(Utilisateur utilisateur, GestionAccesRepository gestionAccesRepository) {
+        Utilisateur utilisateurExistant = gestionAccesRepository.obtenirUtilisateurParEmail(utilisateur.getEmail());
 
         if (utilisateurExistant == null) {
             return utilisateur.getRoles() == null ? Set.of() : new HashSet<>(utilisateur.getRoles());

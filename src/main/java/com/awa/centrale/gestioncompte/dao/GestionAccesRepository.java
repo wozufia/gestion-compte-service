@@ -1,21 +1,25 @@
 package com.awa.centrale.gestioncompte.dao;
 
+import com.awa.centrale.gestioncompte.model.Compte;
 import com.awa.centrale.gestioncompte.model.Role;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
-
-import java.util.List;
-import java.util.Set;
+import com.awa.centrale.gestioncompte.utils.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
 @Repository
 @RequiredArgsConstructor
 @Transactional
-public class UtilisateurDao {
+public class GestionAccesRepository {
 
     private final UtilisateurRepository utilisateurRepository;
     private final RoleRepository roleRepository;
+    private final CompteRepository compteRepository;
 
     public Utilisateur obtenirUtilisateurParEmailEtMotDePasse(String email, String motDePasse) {
         return utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue(email, motDePasse);
@@ -59,11 +63,11 @@ public class UtilisateurDao {
     public Role sauverRole(Role role) {
         Role roleExistant = roleRepository.findByNom(role.getNom());
         if (roleExistant == null) {
-            roleRepository.save(role);
+            return roleRepository.save(role);
         }
-        roleRepository.save(role);
         return role;
     }
+
     private void sauverRolesSiNonExistant(Set<Role> roles) {
         for (Role roleCandidat : roles) {
             String nomRole = roleCandidat.getNom();
@@ -73,4 +77,28 @@ public class UtilisateurDao {
             }
         }
     }
+
+    public Compte obtenirCompteParNom(String nomCompte) {
+       return  compteRepository.findByNom(nomCompte);
+    }
+
+    public Compte creerCompte(Compte compte) {
+        Compte compteExistant = compteRepository.findByNom(compte.getNom());
+        if (compteExistant == null) {
+            return compteRepository.save(compte);
+        }
+        else{
+            throw new IllegalArgumentException("Le compte avec le nom " + compte.getNom() + " existe déjà.");
+        }
+    }
+
+    public Compte obtenirCompteParId(int id) {
+        return compteRepository.findById(id).orElse(null);
+    }
+
+    public Compte sauverCompte(Compte compte) {
+        return compteRepository.save(compte);
+    }
+
+
 }

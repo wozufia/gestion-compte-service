@@ -7,6 +7,8 @@ public class CreationCompteRequete {
 
   private String nom;
 
+  private String application;
+
   private Contact contact;
 
 }

@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.utilisateur;
 
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.AuthReponse;
 import com.awa.centrale.gestioncompte.model.ConnectionRequete;
 import com.awa.centrale.gestioncompte.model.Role;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class ConnectionUtilisateurService {
 
     @Autowired
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     @Value("${jwt.secret.key}")
     private String jwtSecret;
@@ -50,8 +50,10 @@ public class ConnectionUtilisateurService {
         Date expiration = Date.from(Instant.now().plus(15, ChronoUnit.MINUTES));
         String token = Jwts.builder()
                 .subject(utilisateur.getFirstName() + " " + utilisateur.getLastName())
+                .id(String.valueOf(utilisateur.getId()))
                 .claims(claims)
                 .issuedAt(Date.from(Instant.now()))
+                .issuer(detailConnection.getApplication())
                 .expiration(expiration)
                 .signWith(key)
                 .compact();
@@ -63,7 +65,7 @@ public class ConnectionUtilisateurService {
     }
 
     private Utilisateur obtenirUtilisateur(ConnectionRequete detailConnection) {
-        return utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse(
+        return gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse(
                 detailConnection.getEmail(),
                 detailConnection.getMotDePasse()
         );

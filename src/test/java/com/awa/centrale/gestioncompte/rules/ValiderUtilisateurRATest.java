@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.rules;
 
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.Role;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class ValiderUtilisateurRATest {
 
     @Mock
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     @Test
     void obtenirNouveauxRoles_shouldReturnEmptySetWhenUserDoesNotExist() {
@@ -27,9 +27,9 @@ class ValiderUtilisateurRATest {
         utilisateur.setEmail("new@example.com");
         utilisateur.setRoles(Set.of());
 
-        when(utilisateurDao.obtenirUtilisateurParEmail("new@example.com")).thenReturn(null);
+        when(gestionAccesRepository.obtenirUtilisateurParEmail("new@example.com")).thenReturn(null);
 
-        Set<Role> result = assertDoesNotThrow(() -> ValiderUtilisateurRA.obtenirNouveauxRoles(utilisateur, utilisateurDao));
+        Set<Role> result = assertDoesNotThrow(() -> ValiderUtilisateurRA.obtenirNouveauxRoles(utilisateur, gestionAccesRepository));
 
         assertEquals(Set.of(), result);
     }
@@ -48,10 +48,10 @@ class ValiderUtilisateurRATest {
         existingRole.setNom("USER_API0");
         existingUser.setRoles(Set.of(existingRole));
 
-        when(utilisateurDao.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
+        when(gestionAccesRepository.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
 
         assertThrows(IllegalArgumentException.class,
-                () -> ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, utilisateurDao));
+                () -> ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, gestionAccesRepository));
     }
 
     @Test
@@ -68,9 +68,9 @@ class ValiderUtilisateurRATest {
         existingRole.setNom("USER_API0");
         existingUser.setRoles(Set.of(existingRole));
 
-        when(utilisateurDao.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(existingUser);
+        when(gestionAccesRepository.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(existingUser);
 
-        Set<Role> result = ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, utilisateurDao);
+        Set<Role> result = ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, gestionAccesRepository);
 
         assertEquals(Set.of(newRole,existingRole), result);
     }
