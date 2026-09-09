@@ -13,6 +13,9 @@ jobs:
     permissions:
       contents: read
 
+    env:
+      ARTIFACT_BASE_NAME: gestion-compte
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,16 +33,20 @@ jobs:
       - name: Generate sources and run tests
         run: ./gradlew clean build
 
+      - name: Build artifact timestamp
+        id: artifact-name
+        run: echo "name=${ARTIFACT_BASE_NAME}_$(date -u +'%d%m%Y%H%M')" >> "$GITHUB_OUTPUT"
+
       - name: Upload generated sources
         uses: actions/upload-artifact@v4
         with:
-          name: generated-sources
+          name: generated-sources_${{ steps.artifact-name.outputs.name }}
           path: build/generated/src/main/java
           if-no-files-found: error
 
       - name: Upload build reports
         uses: actions/upload-artifact@v4
         with:
-          name: build-reports
+          name: ${{ steps.artifact-name.outputs.name }}_build-reports
           path: build/reports
           if-no-files-found: ignore
