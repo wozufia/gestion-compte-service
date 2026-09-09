@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UtilisateurDaoTest {
+class GestionAccesRepositoryTest {
 
     @Mock
     private UtilisateurRepository utilisateurRepository;
@@ -28,7 +28,7 @@ class UtilisateurDaoTest {
     private RoleRepository roleRepository;
 
     @InjectMocks
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     @Test
     void obtenirUtilisateurParEmailEtMotDePasse_shouldDelegateToRepository() {
@@ -38,7 +38,7 @@ class UtilisateurDaoTest {
 
         when(utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue("user@example.com", "Secret123")).thenReturn(expected);
 
-        Utilisateur result = utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse("user@example.com", "Secret123");
+        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse("user@example.com", "Secret123");
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
@@ -52,7 +52,7 @@ class UtilisateurDaoTest {
 
         when(utilisateurRepository.findByEmailAndActiveTrue("user@example.com")).thenReturn(expected);
 
-        Utilisateur result = utilisateurDao.obtenirUtilisateurParEmail("user@example.com");
+        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParEmail("user@example.com");
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
@@ -67,7 +67,7 @@ class UtilisateurDaoTest {
 
         when(utilisateurRepository.findByIdAndActiveTrue(42)).thenReturn(expected);
 
-        Utilisateur result = utilisateurDao.obtenirUtilisateurParId(42);
+        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParId(42);
 
         assertNotNull(result);
         assertEquals(42, result.getId());
@@ -83,7 +83,7 @@ class UtilisateurDaoTest {
 
         when(utilisateurRepository.save(utilisateur)).thenReturn(utilisateur);
 
-        Utilisateur result = utilisateurDao.sauvegarderUtilisateur(utilisateur);
+        Utilisateur result = gestionAccesRepository.sauvegarderUtilisateur(utilisateur);
 
         assertNotNull(result);
         assertEquals("save@example.com", result.getEmail());
@@ -106,7 +106,7 @@ class UtilisateurDaoTest {
         when(utilisateurRepository.findByEmailAndActiveTrue("user@example.com")).thenReturn(existing);
         when(utilisateurRepository.save(existing)).thenReturn(existing);
 
-        Utilisateur result = utilisateurDao.ajouterRolesAUtilisateurEtActiver("user@example.com", roles);
+        Utilisateur result = gestionAccesRepository.ajouterRolesAUtilisateurEtActiver("user@example.com", roles);
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
@@ -120,7 +120,7 @@ class UtilisateurDaoTest {
     void obtenirUtilisateurParEmailEtMotDePasse_shouldReturnNullWhenNotFound() {
         when(utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue("missing@example.com", "badpass")).thenReturn(null);
 
-        Utilisateur result = utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse("missing@example.com", "badpass");
+        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse("missing@example.com", "badpass");
 
         assertNull(result);
     }

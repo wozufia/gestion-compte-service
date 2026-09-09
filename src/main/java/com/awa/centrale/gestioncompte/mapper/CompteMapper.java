@@ -10,4 +10,6 @@ public interface CompteMapper {
 
     @Mapping(target = "id", ignore = true)
     Compte toModel(CompteDto dto);
+
+    CompteDto toDto(Compte compte);
 }

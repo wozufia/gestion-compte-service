@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.awa.centrale.gestioncompte.dto.CompteDto;
 import com.awa.centrale.gestioncompte.dto.ContactDto;
+import com.awa.centrale.gestioncompte.enums.StatusCompteEnum;
 import com.awa.centrale.gestioncompte.model.Compte;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,14 @@ class CompteMapperTest {
         CompteDto dto = new CompteDto();
         dto.setNom("Test Account");
         dto.setApplication("TestApp");
-        dto.setStatus("ACTIVE");
+        dto.setStatus("ACTIF");
         dto.setContact(dtoContact);
 
         Compte model = compteMapper.toModel(dto);
 
         assertEquals("Test Account", model.getNom());
         assertEquals("TestApp", model.getApplication());
-        assertEquals("ACTIVE", model.getStatus());
+        assertEquals(StatusCompteEnum.ACTIF, model.getStatus());
         assertNotNull(model.getContact());
         assertEquals("contact@example.com", model.getContact().getEmail());
         assertNull(model.getId());

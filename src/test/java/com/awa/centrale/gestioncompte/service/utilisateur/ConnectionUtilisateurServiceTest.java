@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import jakarta.persistence.EntityNotFoundException;
 
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.AuthReponse;
 import com.awa.centrale.gestioncompte.model.ConnectionRequete;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
@@ -27,7 +27,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 class ConnectionUtilisateurServiceTest {
 
     @Mock
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     @InjectMocks
     private ConnectionUtilisateurService connectionUtilisateurService;
@@ -43,6 +43,7 @@ class ConnectionUtilisateurServiceTest {
         ConnectionRequete detailConnection = new ConnectionRequete();
         detailConnection.setEmail("admin@gestion-compte.local");
         detailConnection.setMotDePasse("admin123");
+        detailConnection.setApplication("testApp");
 
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setEmail("admin@gestion-compte.local");
@@ -51,7 +52,7 @@ class ConnectionUtilisateurServiceTest {
         utilisateur.setLastName("Systeme");
         utilisateur.setRoles(Set.of());
 
-        when(utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse(
+        when(gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse(
                 "admin@gestion-compte.local",
                 "admin123"
         )).thenReturn(utilisateur);
@@ -60,7 +61,7 @@ class ConnectionUtilisateurServiceTest {
 
         assertNotNull(response);
         assertNotNull(response.getJwt());
-        verify(utilisateurDao).obtenirUtilisateurParEmailEtMotDePasse(
+        verify(gestionAccesRepository).obtenirUtilisateurParEmailEtMotDePasse(
                 "admin@gestion-compte.local",
                 "admin123"
         );
@@ -72,7 +73,7 @@ class ConnectionUtilisateurServiceTest {
         detailConnection.setEmail("inconnu@gestion-compte.local");
         detailConnection.setMotDePasse("mauvaisMotDePasse");
 
-        when(utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse(
+        when(gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse(
                 "inconnu@gestion-compte.local",
                 "mauvaisMotDePasse"
         )).thenReturn(null);
@@ -80,7 +81,7 @@ class ConnectionUtilisateurServiceTest {
         assertThrows(EntityNotFoundException.class,
                 () -> connectionUtilisateurService.genererToken(detailConnection));
 
-        verify(utilisateurDao).obtenirUtilisateurParEmailEtMotDePasse(
+        verify(gestionAccesRepository).obtenirUtilisateurParEmailEtMotDePasse(
                 "inconnu@gestion-compte.local",
                 "mauvaisMotDePasse"
         );

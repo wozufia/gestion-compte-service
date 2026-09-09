@@ -14,14 +14,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("local")
-class TestIntegrationUtilisateurDao {
+class TestIntegrationGestionAccesRepository {
 
     @Autowired
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     @Test
     void obtenirUtilisateurParEmailEtMotDePasse_retourneUtilisateur() {
-        Utilisateur utilisateur = utilisateurDao.obtenirUtilisateurParEmailEtMotDePasse("test@gestion-compte.com", "passWord123");
+        Utilisateur utilisateur = gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse("test@gestion-compte.com", "passWord123");
 
         assertNotNull(utilisateur);
         assertEquals("test@gestion-compte.com", utilisateur.getEmail());

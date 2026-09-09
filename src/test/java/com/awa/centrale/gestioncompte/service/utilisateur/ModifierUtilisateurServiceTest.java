@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.utilisateur;
 
-import com.awa.centrale.gestioncompte.dao.UtilisateurDao;
+import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.ModifierUtilisateurRequete;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 class ModifierUtilisateurServiceTest {
 
     @Mock
-    private UtilisateurDao utilisateurDao;
+    private GestionAccesRepository gestionAccesRepository;
 
     @InjectMocks
     private ModifierUtilisateurService modifierUtilisateurService;
@@ -48,8 +48,8 @@ class ModifierUtilisateurServiceTest {
         updatedUser.setLastName("Nom");
         updatedUser.setMotDePasse("NouveauMotDePasse123");
 
-        when(utilisateurDao.obtenirUtilisateurParId(userId)).thenReturn(existingUser);
-        when(utilisateurDao.sauvegarderUtilisateur(any(Utilisateur.class))).thenReturn(updatedUser);
+        when(gestionAccesRepository.obtenirUtilisateurParId(userId)).thenReturn(existingUser);
+        when(gestionAccesRepository.sauvegarderUtilisateur(any(Utilisateur.class))).thenReturn(updatedUser);
 
         Utilisateur result = modifierUtilisateurService.modifierUtilisateur(userId, requete);
 
@@ -57,8 +57,8 @@ class ModifierUtilisateurServiceTest {
         assertEquals("Nouveau", result.getFirstName());
         assertEquals("Nom", result.getLastName());
         assertEquals("NouveauMotDePasse123", result.getMotDePasse());
-        verify(utilisateurDao).obtenirUtilisateurParId(userId);
-        verify(utilisateurDao).sauvegarderUtilisateur(existingUser);
+        verify(gestionAccesRepository).obtenirUtilisateurParId(userId);
+        verify(gestionAccesRepository).sauvegarderUtilisateur(existingUser);
     }
 
     @Test
@@ -69,7 +69,7 @@ class ModifierUtilisateurServiceTest {
         requete.setLastName("Nom");
         requete.setMotDePasse("NouveauMotDePasse123");
 
-        when(utilisateurDao.obtenirUtilisateurParId(userId)).thenReturn(null);
+        when(gestionAccesRepository.obtenirUtilisateurParId(userId)).thenReturn(null);
 
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
@@ -77,6 +77,6 @@ class ModifierUtilisateurServiceTest {
         );
 
         assertEquals("Utilisateur non trouvé avec l'ID: " + userId, exception.getMessage());
-        verify(utilisateurDao).obtenirUtilisateurParId(userId);
+        verify(gestionAccesRepository).obtenirUtilisateurParId(userId);
     }
 }

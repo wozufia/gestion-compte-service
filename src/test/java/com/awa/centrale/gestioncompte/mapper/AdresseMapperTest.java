@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.awa.centrale.gestioncompte.dto.AdresseDto;
 import com.awa.centrale.gestioncompte.model.Adresse;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class AdresseMapperTest {
-
     @Autowired
     private AdresseMapper adresseMapper;
 

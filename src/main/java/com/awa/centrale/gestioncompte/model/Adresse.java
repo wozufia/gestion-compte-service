@@ -9,7 +9,12 @@ public class Adresse {
 
   private String ville;
 
+  private String province;
+
+  private String pays;
+
   private String codePostal;
 
+  private String description;
 }
 
