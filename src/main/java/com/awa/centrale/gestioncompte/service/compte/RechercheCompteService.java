@@ -1,8 +1,7 @@
 package com.awa.centrale.gestioncompte.service.compte;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Compte;
-import com.awa.centrale.gestioncompte.model.Utilisateur;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +10,10 @@ import org.springframework.stereotype.Service;
 public class RechercheCompteService {
 
     @Autowired
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     public Compte obtenirComptePar(int id) {
-        Compte compte = gestionAccesRepository.obtenirCompteParId(id);
+        Compte compte = accesManager.obtenirCompteParId(id);
         if (compte != null) {
             return compte;
         } else {

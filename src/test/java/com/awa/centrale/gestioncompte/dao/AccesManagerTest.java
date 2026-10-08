@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GestionAccesRepositoryTest {
+class AccesManagerTest {
 
     @Mock
     private UtilisateurRepository utilisateurRepository;
@@ -28,7 +28,7 @@ class GestionAccesRepositoryTest {
     private RoleRepository roleRepository;
 
     @InjectMocks
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @Test
     void obtenirUtilisateurParEmailEtMotDePasse_shouldDelegateToRepository() {
@@ -38,7 +38,7 @@ class GestionAccesRepositoryTest {
 
         when(utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue("user@example.com", "Secret123")).thenReturn(expected);
 
-        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse("user@example.com", "Secret123");
+        Utilisateur result = accesManager.obtenirUtilisateurParEmailEtMotDePasse("user@example.com", "Secret123");
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
@@ -52,7 +52,7 @@ class GestionAccesRepositoryTest {
 
         when(utilisateurRepository.findByEmailAndActiveTrue("user@example.com")).thenReturn(expected);
 
-        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParEmail("user@example.com");
+        Utilisateur result = accesManager.obtenirUtilisateurParEmail("user@example.com");
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
@@ -67,7 +67,7 @@ class GestionAccesRepositoryTest {
 
         when(utilisateurRepository.findByIdAndActiveTrue(42)).thenReturn(expected);
 
-        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParId(42);
+        Utilisateur result = accesManager.obtenirUtilisateurParId(42);
 
         assertNotNull(result);
         assertEquals(42, result.getId());
@@ -83,7 +83,7 @@ class GestionAccesRepositoryTest {
 
         when(utilisateurRepository.save(utilisateur)).thenReturn(utilisateur);
 
-        Utilisateur result = gestionAccesRepository.sauvegarderUtilisateur(utilisateur);
+        Utilisateur result = accesManager.sauvegarderUtilisateur(utilisateur);
 
         assertNotNull(result);
         assertEquals("save@example.com", result.getEmail());
@@ -106,7 +106,7 @@ class GestionAccesRepositoryTest {
         when(utilisateurRepository.findByEmailAndActiveTrue("user@example.com")).thenReturn(existing);
         when(utilisateurRepository.save(existing)).thenReturn(existing);
 
-        Utilisateur result = gestionAccesRepository.ajouterRolesAUtilisateurEtActiver("user@example.com", roles);
+        Utilisateur result = accesManager.ajouterRolesAUtilisateurEtActiver("user@example.com", roles);
 
         assertNotNull(result);
         assertEquals("user@example.com", result.getEmail());
@@ -120,7 +120,7 @@ class GestionAccesRepositoryTest {
     void obtenirUtilisateurParEmailEtMotDePasse_shouldReturnNullWhenNotFound() {
         when(utilisateurRepository.findByEmailAndMotDePasseAndActiveTrue("missing@example.com", "badpass")).thenReturn(null);
 
-        Utilisateur result = gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse("missing@example.com", "badpass");
+        Utilisateur result = accesManager.obtenirUtilisateurParEmailEtMotDePasse("missing@example.com", "badpass");
 
         assertNull(result);
     }

@@ -1,14 +1,6 @@
 package com.awa.centrale.gestioncompte.service.compte;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.enums.StatusCompteEnum;
 import com.awa.centrale.gestioncompte.model.Compte;
 import com.awa.centrale.gestioncompte.model.Contact;
@@ -19,11 +11,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class CreerCompteServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private CreerCompteService creerCompteService;
@@ -40,7 +39,7 @@ class CreerCompteServiceTest {
         compteCree.setApplication("gestion-compte");
         compteCree.setStatus(StatusCompteEnum.ACTIF);
 
-        when(gestionAccesRepository.creerCompte(any(Compte.class))).thenReturn(compteCree);
+        when(accesManager.creerCompte(any(Compte.class))).thenReturn(compteCree);
 
         Compte result = creerCompteService.creerCompte(requete);
 
@@ -48,7 +47,7 @@ class CreerCompteServiceTest {
         assertEquals("Compte principal", result.getNom());
         assertEquals("gestion-compte", result.getApplication());
         assertEquals(StatusCompteEnum.ACTIF, result.getStatus());
-        verify(gestionAccesRepository).creerCompte(any(Compte.class));
+        verify(accesManager).creerCompte(any(Compte.class));
 
     }
 
@@ -57,7 +56,7 @@ class CreerCompteServiceTest {
         CreationCompteRequete requete = new CreationCompteRequete();
         requete.setNom("Compte test");
 
-        when(gestionAccesRepository.creerCompte(any(Compte.class))).thenReturn(null);
+        when(accesManager.creerCompte(any(Compte.class))).thenReturn(null);
 
             RuntimeException exception = assertThrows(RuntimeException.class,
                     () -> creerCompteService.creerCompte(requete));

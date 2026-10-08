@@ -8,14 +8,14 @@ plugins {
 
 repositories {
 	mavenCentral()
-//	maven {
-//		name = "GitHubPackages"
-//		url = uri("https://maven.pkg.github.com/wozufia/gestion-compte")
-//		credentials {
-//			username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-//			password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-//		}
-//	}
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/wozufia/gestion-compte-contrat")
+		credentials {
+			username = project.findProperty("gpr.user")
+			password = project.findProperty("gpr.key")
+		}
+	}
 }
 
 group = 'com.awa.centrale'
@@ -32,7 +32,11 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	contractArtifact
 }
+
+def extractedContractDir = layout.buildDirectory.dir("tmp/openapi/contract")
+def extractedContractSpec = extractedContractDir.map { it.file("gestion-compte-contrat.yml") }
 
 publishing {
 	publications {
@@ -74,25 +78,25 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 	// H2 base de données en mémoire pour les tests
 	runtimeOnly 'com.h2database:h2'
+	contractArtifact 'com.awa.centrale:gestion-compte-contrat:1.0.1@jar'
+
+	//temporaire spark
+//	implementation 'org.apache.spark:spark-sql:3.5.1'
+//	compileOnly("org.apache.spark:spark-sql_2.13:4.2.0")
 
 }
 
-def contractSpecFile = layout.buildDirectory.file("tmp/openapi/gestion-compte-contrat.yml")
-
-tasks.register('fetchContractSpec') {
-	outputs.file(contractSpecFile)
-	doLast {
-		def output = contractSpecFile.get().asFile
-		output.parentFile.mkdirs()
-			uri("https://raw.githubusercontent.com/wozufia/gestion-compte-contrat/master/gestion-compte-contrat.yml").toURL()
-				.withInputStream { input ->
-					output.withOutputStream { stream -> stream << input }
-				}
+tasks.register('extractContractSpec', Copy) {
+	from({
+		zipTree(configurations.contractArtifact.singleFile)
+	}) {
+		include 'gestion-compte-contrat.yml'
 	}
+	into extractedContractDir
 }
 
 openApiGenerate {
-	inputSpec = contractSpecFile.get().asFile.absolutePath
+	inputSpec = extractedContractSpec.get().asFile.absolutePath
 	outputDir = layout.buildDirectory.dir("generated").get().asFile.absolutePath
 	apiPackage = "com.awa.centrale.gestioncompte.api"
 	modelPackage = "com.awa.centrale.gestioncompte.dto"
@@ -125,7 +129,7 @@ openApiGenerate {
 }
 
 tasks.named('openApiGenerate') {
-	dependsOn tasks.named('fetchContractSpec')
+	dependsOn tasks.named('extractContractSpec')
 }
 
 tasks.named('compileJava') {

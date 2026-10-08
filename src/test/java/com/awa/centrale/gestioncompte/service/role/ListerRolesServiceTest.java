@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Role;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ListerRolesServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private ListerRolesService listerRolesService;
@@ -34,13 +34,13 @@ class ListerRolesServiceTest {
         user.setDescription("Accès simple");
 
         List<Role> expectedRoles = List.of(admin, user);
-        when(gestionAccesRepository.listerRoles()).thenReturn(expectedRoles);
+        when(accesManager.listerRoles()).thenReturn(expectedRoles);
 
         List<Role> result = listerRolesService.listerRoles();
 
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(expectedRoles, result);
-        verify(gestionAccesRepository).listerRoles();
+        verify(accesManager).listerRoles();
     }
 }

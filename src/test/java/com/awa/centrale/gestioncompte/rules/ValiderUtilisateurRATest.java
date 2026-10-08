@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.rules;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Role;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class ValiderUtilisateurRATest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @Test
     void obtenirNouveauxRoles_shouldReturnEmptySetWhenUserDoesNotExist() {
@@ -27,9 +27,9 @@ class ValiderUtilisateurRATest {
         utilisateur.setEmail("new@example.com");
         utilisateur.setRoles(Set.of());
 
-        when(gestionAccesRepository.obtenirUtilisateurParEmail("new@example.com")).thenReturn(null);
+        when(accesManager.obtenirUtilisateurParEmail("new@example.com")).thenReturn(null);
 
-        Set<Role> result = assertDoesNotThrow(() -> ValiderUtilisateurRA.obtenirNouveauxRoles(utilisateur, gestionAccesRepository));
+        Set<Role> result = assertDoesNotThrow(() -> ValiderUtilisateurRA.obtenirNouveauxRoles(utilisateur, accesManager));
 
         assertEquals(Set.of(), result);
     }
@@ -48,10 +48,10 @@ class ValiderUtilisateurRATest {
         existingRole.setNom("USER_API0");
         existingUser.setRoles(Set.of(existingRole));
 
-        when(gestionAccesRepository.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
+        when(accesManager.obtenirUtilisateurParEmail("existing@example.com")).thenReturn(existingUser);
 
         assertThrows(IllegalArgumentException.class,
-                () -> ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, gestionAccesRepository));
+                () -> ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, accesManager));
     }
 
     @Test
@@ -68,9 +68,9 @@ class ValiderUtilisateurRATest {
         existingRole.setNom("USER_API0");
         existingUser.setRoles(Set.of(existingRole));
 
-        when(gestionAccesRepository.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(existingUser);
+        when(accesManager.obtenirUtilisateurParEmail("mixed@example.com")).thenReturn(existingUser);
 
-        Set<Role> result = ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, gestionAccesRepository);
+        Set<Role> result = ValiderUtilisateurRA.obtenirNouveauxRoles(newUser, accesManager);
 
         assertEquals(Set.of(newRole,existingRole), result);
     }

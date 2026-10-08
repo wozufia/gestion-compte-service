@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import jakarta.persistence.EntityNotFoundException;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
 import com.awa.centrale.gestioncompte.model.AuthReponse;
 import com.awa.centrale.gestioncompte.model.ConnectionRequete;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
@@ -27,7 +27,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 class ConnectionUtilisateurServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private ConnectionUtilisateurService connectionUtilisateurService;
@@ -52,7 +52,7 @@ class ConnectionUtilisateurServiceTest {
         utilisateur.setLastName("Systeme");
         utilisateur.setRoles(Set.of());
 
-        when(gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse(
+        when(accesManager.obtenirUtilisateurParEmailEtMotDePasse(
                 "admin@gestion-compte.local",
                 "admin123"
         )).thenReturn(utilisateur);
@@ -61,7 +61,7 @@ class ConnectionUtilisateurServiceTest {
 
         assertNotNull(response);
         assertNotNull(response.getJwt());
-        verify(gestionAccesRepository).obtenirUtilisateurParEmailEtMotDePasse(
+        verify(accesManager).obtenirUtilisateurParEmailEtMotDePasse(
                 "admin@gestion-compte.local",
                 "admin123"
         );
@@ -73,7 +73,7 @@ class ConnectionUtilisateurServiceTest {
         detailConnection.setEmail("inconnu@gestion-compte.local");
         detailConnection.setMotDePasse("mauvaisMotDePasse");
 
-        when(gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse(
+        when(accesManager.obtenirUtilisateurParEmailEtMotDePasse(
                 "inconnu@gestion-compte.local",
                 "mauvaisMotDePasse"
         )).thenReturn(null);
@@ -81,7 +81,7 @@ class ConnectionUtilisateurServiceTest {
         assertThrows(EntityNotFoundException.class,
                 () -> connectionUtilisateurService.genererToken(detailConnection));
 
-        verify(gestionAccesRepository).obtenirUtilisateurParEmailEtMotDePasse(
+        verify(accesManager).obtenirUtilisateurParEmailEtMotDePasse(
                 "inconnu@gestion-compte.local",
                 "mauvaisMotDePasse"
         );

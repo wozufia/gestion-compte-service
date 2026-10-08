@@ -23,8 +23,8 @@ class GestionRolesControllerIntegrationTest {
 
     @Test
     void listerRoles_shouldReturnExistingRoles() {
-        List<RoleDto> roles = gestionRolesController.listerRoles();
-
+        Iterable<RoleDto> rolesResponse = gestionRolesController.listerRoles();
+        List<RoleDto> roles = (List<RoleDto>) rolesResponse;
         assertNotNull(roles);
         assertFalse(roles.isEmpty());
         assertEquals("ADMIN", roles.getFirst().getNom());

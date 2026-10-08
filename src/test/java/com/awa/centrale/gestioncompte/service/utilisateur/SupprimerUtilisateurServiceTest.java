@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.utilisateur;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class SupprimerUtilisateurServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private SupprimerUtilisateurService supprimerUtilisateurService;
@@ -32,24 +32,24 @@ class SupprimerUtilisateurServiceTest {
         utilisateur.setEmail("user@example.com");
         utilisateur.setActive(true);
 
-        when(gestionAccesRepository.obtenirUtilisateurParId(userId)).thenReturn(utilisateur);
+        when(accesManager.obtenirUtilisateurParId(userId)).thenReturn(utilisateur);
 
         supprimerUtilisateurService.supprimerUtilisateur(userId);
 
         ArgumentCaptor<Utilisateur> captor = ArgumentCaptor.forClass(Utilisateur.class);
-        verify(gestionAccesRepository).sauvegarderUtilisateur(captor.capture());
+        verify(accesManager).sauvegarderUtilisateur(captor.capture());
         
         Utilisateur savedUser = captor.getValue();
         assertEquals(false, savedUser.getActive());
         assertEquals(userId, savedUser.getId());
-        verify(gestionAccesRepository).obtenirUtilisateurParId(userId);
+        verify(accesManager).obtenirUtilisateurParId(userId);
     }
 
     @Test
     void supprimerUtilisateur_shouldThrowExceptionWhenUserNotFound() {
         int userId = 999;
         
-        when(gestionAccesRepository.obtenirUtilisateurParId(userId)).thenReturn(null);
+        when(accesManager.obtenirUtilisateurParId(userId)).thenReturn(null);
 
         EntityNotFoundException exception = assertThrows(
             EntityNotFoundException.class,
@@ -63,7 +63,7 @@ class SupprimerUtilisateurServiceTest {
     void supprimerUtilisateur_shouldNotSaveWhenUserNotFound() {
         int userId = 100;
         
-        when(gestionAccesRepository.obtenirUtilisateurParId(userId)).thenReturn(null);
+        when(accesManager.obtenirUtilisateurParId(userId)).thenReturn(null);
 
         assertThrows(
             EntityNotFoundException.class,

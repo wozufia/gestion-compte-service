@@ -26,8 +26,8 @@ public class GestionRolesController {
     private final ListerRolesService listerRolesService;
     private final CreerRoleService creerRoleService;
 
-    @GetMapping
-    public List<RoleDto> listerRoles(){
+    @GetMapping()
+    public Iterable<RoleDto> listerRoles(){
         List<Role> roles = listerRolesService.listerRoles();
         return roleMapper.toDtoList(roles);
     }
