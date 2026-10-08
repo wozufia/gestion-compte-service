@@ -51,11 +51,12 @@ class GestionRolesControllerTest {
         when(listerRolesService.listerRoles()).thenReturn(List.of(admin));
         when(roleMapper.toDtoList(List.of(admin))).thenReturn(List.of(adminDto));
 
-        List<RoleDto> result = gestionRolesController.listerRoles();
+        Iterable<RoleDto> result = gestionRolesController.listerRoles();
+        List<RoleDto> resultList = (List<RoleDto>) result;
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("ADMIN", result.getFirst().getNom());
+        assertNotNull(resultList);
+        assertEquals(1, resultList.size());
+        assertEquals("ADMIN", resultList.getFirst().getNom());
         verify(listerRolesService).listerRoles();
         verify(roleMapper).toDtoList(List.of(admin));
     }

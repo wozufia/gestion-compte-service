@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.compte;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.enums.StatusCompteEnum;
 import com.awa.centrale.gestioncompte.model.Compte;
 import com.awa.centrale.gestioncompte.model.CreationCompteRequete;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CreerCompteService {
     @Autowired
-    GestionAccesRepository gestionAccesRepository;
+    AccesManager accesManager;
 
     public Compte creerCompte(CreationCompteRequete creationCompteRequete) {
         Compte compteDemande = new Compte();
@@ -21,7 +21,7 @@ public class CreerCompteService {
         compteDemande.setApplication(creationCompteRequete.getApplication());
         compteDemande.setStatus(StatusCompteEnum.ACTIF);
 
-        Compte compteCree = gestionAccesRepository.creerCompte(compteDemande);
+        Compte compteCree = accesManager.creerCompte(compteDemande);
         if (compteCree == null) {
             throw new RuntimeException("Une erreur est survenue lors de la création du compte!");
         }

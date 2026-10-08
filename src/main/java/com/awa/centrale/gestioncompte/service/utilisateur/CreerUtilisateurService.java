@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.utilisateur;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Compte;
 import com.awa.centrale.gestioncompte.model.CreationUtilisateurRequete;
 import com.awa.centrale.gestioncompte.model.Role;
@@ -19,13 +19,13 @@ import static com.awa.centrale.gestioncompte.rules.ValiderUtilisateurRA.obtenirN
 public class CreerUtilisateurService {
 
     @Autowired
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     public Utilisateur creerUtilisateur(CreationUtilisateurRequete creationUtilisateurRequete) {
         Set<String> roles = listerRolesDeRequete(creationUtilisateurRequete.getRoles());
         Utilisateur utilisateurDemande = construireUtilisateur(creationUtilisateurRequete, roles);
 
-        Utilisateur utilisateurExistant = gestionAccesRepository.obtenirUtilisateurParEmail(utilisateurDemande.getEmail());
+        Utilisateur utilisateurExistant = accesManager.obtenirUtilisateurParEmail(utilisateurDemande.getEmail());
 
         if (utilisateurExistant == null) {
             return creerNouvelUtilisateur(utilisateurDemande);
@@ -36,19 +36,18 @@ public class CreerUtilisateurService {
 
     private Utilisateur creerNouvelUtilisateur(Utilisateur utilisateur) {
 
-        return gestionAccesRepository.sauvegarderUtilisateur(utilisateur);
+        return accesManager.sauvegarderUtilisateur(utilisateur);
     }
 
     private Utilisateur ajouterRolesAUtilisateurExistant(Utilisateur utilisateur, Utilisateur utilisateurExistant) {
-        Set<Role> nouveauxRoles = obtenirNouveauxRoles(utilisateur, gestionAccesRepository);
+        Set<Role> nouveauxRoles = obtenirNouveauxRoles(utilisateur, accesManager);
 
         utilisateurExistant.setRoles(nouveauxRoles);
 
-        return gestionAccesRepository.ajouterRolesAUtilisateurEtActiver(utilisateurExistant.getEmail(),nouveauxRoles);
+        return accesManager.ajouterRolesAUtilisateurEtActiver(utilisateurExistant.getEmail(),nouveauxRoles);
     }
 
     private Utilisateur construireUtilisateur(CreationUtilisateurRequete creationUtilisateurRequete, Set<String> roles) {
-        Compte compteExistant = gestionAccesRepository.obtenirCompteParNom(creationUtilisateurRequete.getCompte());
 
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setEmail(creationUtilisateurRequete.getEmail());
@@ -63,7 +62,7 @@ public class CreerUtilisateurService {
 
     private Compte definirCompte(String nomCompte) {
 
-        Compte compteExistant = gestionAccesRepository.obtenirCompteParNom(nomCompte);
+        Compte compteExistant = accesManager.obtenirCompteParNom(nomCompte);
         return compteExistant!=null?compteExistant: Default.defaultCompte();
     }
 

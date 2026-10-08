@@ -3,19 +3,17 @@ package com.awa.centrale.gestioncompte.dao;
 import com.awa.centrale.gestioncompte.model.Compte;
 import com.awa.centrale.gestioncompte.model.Role;
 import com.awa.centrale.gestioncompte.model.Utilisateur;
-import com.awa.centrale.gestioncompte.utils.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
 @Transactional
-public class GestionAccesRepository {
+public class AccesManager {
 
     private final UtilisateurRepository utilisateurRepository;
     private final RoleRepository roleRepository;

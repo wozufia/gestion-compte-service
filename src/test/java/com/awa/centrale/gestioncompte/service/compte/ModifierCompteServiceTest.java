@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Compte;
 import com.awa.centrale.gestioncompte.model.Contact;
 import com.awa.centrale.gestioncompte.model.ModifierCompteRequete;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ModifierCompteServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private ModifierCompteService modifierCompteService;
@@ -36,18 +36,18 @@ class ModifierCompteServiceTest {
         requete.setNom("Nouveau nom");
         requete.setContact(new Contact());
 
-        when(gestionAccesRepository.obtenirCompteParId(8)).thenReturn(compte);
+        when(accesManager.obtenirCompteParId(8)).thenReturn(compte);
 
         Compte result = modifierCompteService.modifierCompte(8, requete);
 
         assertNotNull(result);
         assertEquals("Nouveau nom", result.getNom());
-        verify(gestionAccesRepository).sauverCompte(compte);
+        verify(accesManager).sauverCompte(compte);
     }
 
     @Test
     void modifierCompte_shouldFailWhenAccountDoesNotExist() {
-        when(gestionAccesRepository.obtenirCompteParId(99)).thenReturn(null);
+        when(accesManager.obtenirCompteParId(99)).thenReturn(null);
 
         ModifierCompteRequete requete = new ModifierCompteRequete();
         requete.setNom("Nom indisponible");

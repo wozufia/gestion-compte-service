@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.Compte;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RechercheCompteServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private RechercheCompteService rechercheCompteService;
@@ -29,7 +29,7 @@ class RechercheCompteServiceTest {
         compte.setId(5);
         compte.setNom("Compte recherche");
 
-        when(gestionAccesRepository.obtenirCompteParId(5)).thenReturn(compte);
+        when(accesManager.obtenirCompteParId(5)).thenReturn(compte);
 
         Compte result = rechercheCompteService.obtenirComptePar(5);
 
@@ -40,7 +40,7 @@ class RechercheCompteServiceTest {
 
     @Test
     void obtenirComptePar_shouldThrowWhenAccountDoesNotExist() {
-        when(gestionAccesRepository.obtenirCompteParId(999)).thenReturn(null);
+        when(accesManager.obtenirCompteParId(999)).thenReturn(null);
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> rechercheCompteService.obtenirComptePar(999));

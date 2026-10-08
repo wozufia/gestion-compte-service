@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.enums.StatusCompteEnum;
 import com.awa.centrale.gestioncompte.model.Compte;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class SupprimerCompteServiceTest {
 
     @Mock
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @InjectMocks
     private SupprimerCompteService supprimerCompteService;
@@ -30,17 +30,17 @@ class SupprimerCompteServiceTest {
         compte.setNom("Compte actif");
         compte.setStatus(StatusCompteEnum.ACTIF);
 
-        when(gestionAccesRepository.obtenirCompteParId(3)).thenReturn(compte);
+        when(accesManager.obtenirCompteParId(3)).thenReturn(compte);
 
         supprimerCompteService.supprimerCompte(3);
 
         assertEquals(StatusCompteEnum.INACTIF, compte.getStatus());
-        verify(gestionAccesRepository).sauverCompte(compte);
+        verify(accesManager).sauverCompte(compte);
     }
 
     @Test
     void supprimerCompte_shouldFailWhenAccountDoesNotExist() {
-        when(gestionAccesRepository.obtenirCompteParId(77)).thenReturn(null);
+        when(accesManager.obtenirCompteParId(77)).thenReturn(null);
 
         RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> supprimerCompteService.supprimerCompte(77));

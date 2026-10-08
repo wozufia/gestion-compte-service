@@ -1,6 +1,6 @@
 package com.awa.centrale.gestioncompte.service.utilisateur;
 
-import com.awa.centrale.gestioncompte.dao.GestionAccesRepository;
+import com.awa.centrale.gestioncompte.dao.AccesManager;
 import com.awa.centrale.gestioncompte.model.AuthReponse;
 import com.awa.centrale.gestioncompte.model.ConnectionRequete;
 import com.awa.centrale.gestioncompte.model.Role;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class ConnectionUtilisateurService {
 
     @Autowired
-    private GestionAccesRepository gestionAccesRepository;
+    private AccesManager accesManager;
 
     @Value("${jwt.secret.key}")
     private String jwtSecret;
@@ -65,7 +65,7 @@ public class ConnectionUtilisateurService {
     }
 
     private Utilisateur obtenirUtilisateur(ConnectionRequete detailConnection) {
-        return gestionAccesRepository.obtenirUtilisateurParEmailEtMotDePasse(
+        return accesManager.obtenirUtilisateurParEmailEtMotDePasse(
                 detailConnection.getEmail(),
                 detailConnection.getMotDePasse()
         );
